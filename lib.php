@@ -776,17 +776,17 @@ function reengagement_get_startusers($reengagement) {
     $cm = $modinfo->get_cm($reengagement->cmid);
     $ainfomod = new \core_availability\info_module($cm);
     
-        // RE-73 - Filtering users by the availablilty settings.
+    
+       // RE-73 - Filtering users by the availablilty settings.
     $filteredusers = $ainfomod->filter_user_list($startusers);
     $filtereduserids = array_map(function($obj){
         return $obj->id;
     }, $filteredusers);
     // RE-73 - END.
-
+    
     
     foreach ($startusers as $startcandidate) {
-
-        
+        $information = '';
         if (empty($startcandidate->confirmed)) {
             // Exclude unconfirmed users. Typically this shouldn't happen, but if an unconfirmed user
             // has been enrolled to a course we shouldn't e-mail them about activities they can't access yet.
@@ -797,10 +797,9 @@ function reengagement_get_startusers($reengagement) {
         // RE-73 - $info->is_available() does not seem to check groups. Changing this to use filtered users.
         // Also removes the now unnecessary $information variable from above.
         if (!in_array($startcandidate->id, $filtereduserids)) {
-            unset($startusers[$startcandidate->id]);	            unset($startusers[$startcandidate->id]);
-        }	        }
-        // RE-73 - END.
-    }	    
+            unset($startusers[$startcandidate->id]);
+        }
+    }
 
     return $startusers;
 }
